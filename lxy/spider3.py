@@ -4,7 +4,7 @@ import os
 import re
 
 def saveimag(iamgelist):
-    path = '/home/coldxiangyu/MyDownload/blog/'
+    path = 'D:/MyDownload/blog/'
     if os.path.exists(path) == False:
         os.makedirs(path)
     count = 0
@@ -18,11 +18,11 @@ def saveimag(iamgelist):
             f.flush()
             f.close()
             count += 1
-    url = "http://www.coldxiangyu.com/2017/08/01/docker-intruduction/"
-    content = urllib.request.urlopen(url).read().decode("utf-8")
-    print(content)
-    imagelist = re.findall('img src="(http.*?)"',content)
-    print('共找到',len(imagelist),'张图片')
-    saveimag(imagelist)
+url = "http://www.coldxiangyu.com/2017/08/01/docker-intruduction/"
+content = urllib.request.urlopen(url).read().decode("utf-8")
+print(content)
+imagelist = re.findall('img src="(http.*?)"',content)
+print('共找到',len(imagelist),'张图片')
+saveimag(imagelist)
 
 
