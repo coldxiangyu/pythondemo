@@ -10,7 +10,7 @@ def getContent(url):
     return content
 
 def getPreLink(content):
-    pattern = re.compile(r'<title>(.*?)</title>.*?<div class="pre">.*?<p>.*?<a href="(.*?)">(.*?)</a>.*?</p>.*?</div>.*?<div class="nex">',re.S);
+    pattern = re.compile(r'<head>.*?<title>(.*?)</title>.*?<link.*?canonical.*?href="(http.*?)">.*?</head>.*?<div class="pre">.*?<p>.*?<a href="(.*?)">.*?</a>.*?</p>.*?</div>.*?<div class="nex">', re.S)
     items = re.findall(pattern, content)
     return items[0]
 
@@ -23,19 +23,22 @@ def call(url):
     item = getPreLink(content)
     imagelist = getImageList(content)
     print('《' + item[0] + '》','共有', len(imagelist), '张图片需要保存！')
-    saveImage(item, imagelist)
-    print('保存完毕：' + url)
+    if len(imagelist) > 0:
+        saveImage(item, imagelist)
+        print('保存完毕：' + url)
+    else:
+        print('没有可保存的图片，跳过！')
     try:
-        if item[1] != '':
-            new_url = root_url + item[1]
+        if item[2] != '':
+            new_url = root_url + item[2]
             call(new_url)
     except Exception as e:
         print("打印完毕！");
 
 def saveImage(item, imagelist):
     arrpath = item[1].split('/')
-    filepath = arrpath[0] + arrpath[1] + arrpath[2]
-    path = 'D:/MyDownload/blog/' + filepath + '/' + item[2] + '/'
+    filepath = arrpath[3] + arrpath[4]
+    path = 'D:/MyDownload/blog/' + filepath + '/' + item[0] + '/'
     if not os.path.exists(path):
         os.makedirs(path)
     count = 0
